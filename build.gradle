@@ -23,7 +23,7 @@ task cucumber() {
     javaexec {
       main = "cucumber.api.cli.Main"
       classpath = configurations.behaviorTestRuntime + sourceSets.main.output + sourceSets.behaviorTest.output
-      args = ['--plugin', 'pretty', '--glue', 'gradle.cucumber', 'src/behaviorTest/resources']
+      args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources']
     }
   }
 }
