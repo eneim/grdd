@@ -19,3 +19,9 @@ For a java project which includes both unit test and behavior test code, it is b
 ## TODO
 
 - [ ] Extends ```jar``` task to be able to package dependencies in jar file.
+
+- [ ] Add CI connection.
+
+## LICENSE
+
+> Apache 2.0
