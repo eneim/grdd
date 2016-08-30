@@ -15,3 +15,7 @@ For a java project which includes both unit test and behavior test code, it is b
 ```groovy
 ./gradlew cucumber
 ```
+
+## TODO
+
+- [ ] Extends ```jar``` task to be able to package dependencies in jar file.
