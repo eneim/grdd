@@ -3,40 +3,51 @@ version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 sourceSets {
-  behaviorTest {
-    java {
-      srcDir 'src/behaviorTest/java'
+    behaviorTest {
+        java {
+            srcDir 'src/behaviorTest/java'
+        }
+        resources {
+            srcDir 'src/behaviorTest/resources'
+        }
+        compileClasspath += sourceSets.main.runtimeClasspath
     }
-    resources {
-      srcDir 'src/behaviorTest/resources'
-    }
-    compileClasspath += sourceSets.main.runtimeClasspath
-  }
 }
 
 task cucumber() {
-  dependsOn assemble, compileJava, compileBehaviorTestJava
-  doLast {
-    javaexec {
-      main = "cucumber.api.cli.Main"
-      classpath = configurations.behaviorTestRuntime + sourceSets.main.output + sourceSets.behaviorTest.output
-      args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources']
+    dependsOn assemble, compileJava, compileBehaviorTestJava
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.behaviorTestRuntime + sourceSets.main.output + sourceSets.behaviorTest.output
+            args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources']
+        }
     }
-  }
+}
+
+task cucumber2() {
+    dependsOn assemble, compileJava, compileBehaviorTestJava
+    doLast {
+        javaexec {
+            main = "cucumber.api.cli.Main"
+            classpath = configurations.behaviorTestRuntime + sourceSets.main.output + sourceSets.behaviorTest.output
+            args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources/im/ene/grdd/' + feature]
+        }
+    }
 }
 
 // Ensure the cucumber tests are executed as part of the build. Makes for a very pretty output.
 build.dependsOn cucumber
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-  testCompile group: 'junit', name: 'junit', version: '4.12'
-  behaviorTestCompile 'info.cukes:cucumber-java:1.2.4'
-  behaviorTestCompile 'info.cukes:cucumber-junit:1.2.4'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    behaviorTestCompile 'info.cukes:cucumber-java:1.2.4'
+    behaviorTestCompile 'info.cukes:cucumber-junit:1.2.4'
 }

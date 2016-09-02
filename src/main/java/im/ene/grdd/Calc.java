@@ -8,7 +8,11 @@ public class Calc {
   public Calc() {
   }
 
-  public double plus(double left, double right) {
+  public double add(double left, double right) {
     return left + right;
+  }
+
+  public double sub(double source, double sub) {
+    return source - sub;
   }
 }

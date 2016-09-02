@@ -23,10 +23,10 @@ import org.junit.runners.JUnit4;
   }
 
   @Test public void testCalcPlus() {
-    Assert.assertEquals(10.50000001, calc.plus(9, 1.5), 1e-6);
+    Assert.assertEquals(10.50000001, calc.add(9, 1.5), 1e-6);
   }
 
   @Test public void testCalcPlusFail() {
-    Assert.assertNotEquals(10.50001, calc.plus(9, 1.5), 1e-6);
+    Assert.assertNotEquals(10.50001, calc.add(9, 1.5), 1e-6);
   }
 }
