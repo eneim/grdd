@@ -1,0 +1,11 @@
+language: java
+jdk:
+  - oraclejdk8
+
+script:
+  ./gradlew cucumber
+
+after_success:
+  echo "We are done!"
+after_failure:
+  echo "Hey dude, check it again!"
