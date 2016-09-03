@@ -18,31 +18,35 @@ public class CalcSubBehaviorTest {
     private class State {
         private double start;
         private double eat;
+
+        @Override
+        public String toString() {
+            return "State{" +
+                    "start=" + start +
+                    ", eat=" + eat +
+                    '}';
+        }
     }
 
     private Calc calc;
     private State stateObj;
 
-    static Logger logger = Logger.getLogger("Calc");
-    static int counter = 0;
-
     @Before
     public void setUp() {
-        logger.info("Setup: " + ++counter);
         calc = new Calc();
         stateObj = new State();
+        System.out.println("Before:" + stateObj.toString());
     }
 
     @After
     public void tearDown() {
-        logger.info("Tear down: " + counter);
+        System.out.println("After: " + stateObj.toString());
         calc = null;
         stateObj = null;
     }
 
     @Given("^There are (\\d+) cucumbers$")
     public void thereAreStartCucumbers(double start) throws Throwable {
-        logger.info("Start: " + counter);
         stateObj.start = start;
     }
 

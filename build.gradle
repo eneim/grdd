@@ -1,9 +1,26 @@
 group 'im.ene'
 version '1.0-SNAPSHOT'
 
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceCompatibility = 1.8
+
+ext {
+    // default_test_class is defined in gradle.properties
+    // note that: if running system has the same field default_test_class in gradle.properties,
+    // it will be used instead of our custom value.
+    defaultTestClass = default_test_class
+}
 
 sourceSets {
     behaviorTest {
@@ -37,6 +54,11 @@ task cucumber2() {
             args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources/im/ene/grdd/' + feature]
         }
     }
+}
+
+task testValueFromProperties() {
+    // here we retrieve defaultTestClass value from ext object
+    println("${project.ext.defaultTestClass}")
 }
 
 // Ensure the cucumber tests are executed as part of the build. Makes for a very pretty output.
