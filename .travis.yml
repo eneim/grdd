@@ -6,6 +6,7 @@ script:
   ./gradlew cucumber
 
 after_success:
-  echo "We are done!"
+  - echo "We are done!"
+
 after_failure:
-  echo "Hey dude, check it again!"
+  - echo "Hey dude, check it again!"
