@@ -20,7 +20,7 @@ For a java project which includes both unit test and behavior test code, it is b
 
 - [x] Extends ```jar``` task to be able to package dependencies in jar file.
 
-- [ ] Add CI connection.
+- [x] Add CI script.
 
 ## LICENSE
 
