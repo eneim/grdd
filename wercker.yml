@@ -1,0 +1,27 @@
+# docker box definition
+box: java
+
+# defining the dev pipeline
+dev:
+  steps:
+    # A step that executes `gradle bootRun` command
+    - script:
+      name: run gradle
+      code: |
+        ./gradlew test
+
+# Build definition
+build:
+  # The steps that will be executed on build
+  steps:
+    # A step that executes `gradle build` command
+    - script:
+        name: show base information
+        code: |
+          ./gradlew -v
+          echo $JAVA_HOME
+
+    - script:
+        name: run gradle
+        code: |
+          ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
