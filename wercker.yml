@@ -1,5 +1,5 @@
 # docker box definition
-box: java
+box: cgswong/aws
 
 # defining the dev pipeline
 dev:
@@ -20,8 +20,29 @@ build:
         code: |
           ./gradlew -v
           echo $JAVA_HOME
+    - script:
+        name: export AWS credentials
+        code: |
+          export AWS_ACCESS_KEY_ID=$SWA_ACCESS_KEY
+          export AWS_SECRET_ACCESS_KEY=$SWA_SECRET_KEY
+          export AWS_DEFAULT_REGION=us-west-2
+          export AWS_DEFAULT_OUTPUT=json
 
     - script:
         name: run gradle
         code: |
           ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
+
+deploy:
+    steps:
+        - script:
+            name: upload to S3
+            code: |
+              aws s3 cp ./build/libs/grdd-1.0-SNAPSHOT.jar s3://nam-yuntest-jar
+
+    after-steps:
+        - slack-notifier:
+            url: $SLACK_URL_GITHUB
+            channel: github
+            username: cibot
+            notify_on: "failed"
