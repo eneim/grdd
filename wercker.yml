@@ -26,8 +26,8 @@ build:
           ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR build
 
 deploy:
-    steps:
-        - script:
+  steps:
+    - script:
         name: export AWS credentials
         code: |
           export AWS_ACCESS_KEY_ID=$SWA_ACCESS_KEY
@@ -35,14 +35,14 @@ deploy:
           export AWS_DEFAULT_REGION=us-west-2
           export AWS_DEFAULT_OUTPUT=json
 
-        - script:
-            name: upload to S3
-            code: |
-              aws s3 cp ./build/libs/grdd-1.0-SNAPSHOT.jar s3://nam-yuntest-jar
+    - script:
+        name: upload to S3
+        code: |
+          aws s3 cp ./build/libs/grdd-1.0-SNAPSHOT.jar s3://nam-yuntest-jar
 
-    after-steps:
-        - slack-notifier:
-            url: $SLACK_URL_GITHUB
-            channel: github
-            username: cibot
-            notify_on: "failed"
+  after-steps:
+    - slack-notifier:
+        url: $SLACK_URL_GITHUB
+        channel: github
+        username: cibot
+        notify_on: "succeed"
