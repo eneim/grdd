@@ -38,7 +38,7 @@ deploy:
     - script:
         name: upload to S3
         code: |
-          aws s3 cp ./build/libs/grdd-1.0-SNAPSHOT.jar s3://nam-yuntest-jar
+          aws s3 cp ./build/libs/grdd-1.0.0-all.jar s3://nam-yuntest-jar
 
   after-steps:
     - slack-notifier:
