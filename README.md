@@ -22,6 +22,8 @@ For a java project which includes both unit test and behavior test code, it is b
 
 - [x] Add CI script.
 
+- [ ] Start EC2 to run script.
+
 ## LICENSE
 
 > Apache 2.0
