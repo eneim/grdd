@@ -2,12 +2,12 @@ group 'im.ene'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
-    }
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+  }
 }
 
 apply plugin: 'java'
@@ -16,60 +16,77 @@ apply plugin: 'com.github.johnrengelman.shadow'
 sourceCompatibility = 1.8
 
 ext {
-    // default_test_class is defined in gradle.properties
-    // note that: if running system has the same field default_test_class in gradle.properties,
-    // it will be used instead of our custom value.
-    defaultTestClass = default_test_class
+  // default_test_class is defined in gradle.properties
+  // note that: if running system has the same field default_test_class in gradle.properties,
+  // it will be used instead of our custom value.
+  defaultTestClass = default_test_class
 }
 
 sourceSets {
-    behaviorTest {
-        java {
-            srcDir 'src/behaviorTest/java'
-        }
-        resources {
-            srcDir 'src/behaviorTest/resources'
-        }
-        compileClasspath += sourceSets.main.runtimeClasspath
+  behaviorTest {
+    java {
+      srcDir 'src/behaviorTest/java'
     }
+    resources {
+      srcDir 'src/behaviorTest/resources'
+    }
+    compileClasspath += sourceSets.main.runtimeClasspath
+  }
+}
+
+shadowJar {
+  baseName = 'grdd'
+  version = '1.0.0'
+}
+
+// build helper
+task wrapper(type: Wrapper) {
+  gradleVersion = '3.2.1'
+  distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
 task cucumber() {
-    dependsOn assemble, compileJava, compileBehaviorTestJava
-    doLast {
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.behaviorTestRuntime + sourceSets.main.output + sourceSets.behaviorTest.output
-            args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources']
-        }
+  dependsOn assemble, compileJava, compileBehaviorTestJava
+  doLast {
+    javaexec {
+      main = "cucumber.api.cli.Main"
+      classpath = configurations.behaviorTestRuntime + sourceSets.main.output +
+              sourceSets.behaviorTest.output
+      args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources']
     }
+  }
 }
 
 task cucumber2() {
-    dependsOn assemble, compileJava, compileBehaviorTestJava
-    doLast {
-        javaexec {
-            main = "cucumber.api.cli.Main"
-            classpath = configurations.behaviorTestRuntime + sourceSets.main.output + sourceSets.behaviorTest.output
-            args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources/im/ene/grdd/' + feature]
-        }
+  dependsOn assemble, compileJava, compileBehaviorTestJava
+  doLast {
+    javaexec {
+      main = "cucumber.api.cli.Main"
+      classpath = configurations.behaviorTestRuntime + sourceSets.main.output +
+              sourceSets.behaviorTest.output
+      args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources/im/ene/grdd/' +
+              feature]
     }
+  }
 }
 
 task testValueFromProperties() {
-    // here we retrieve defaultTestClass value from ext object
-    println("${project.ext.defaultTestClass}")
+  // here we retrieve defaultTestClass value from ext object
+  println("${project.ext.defaultTestClass}")
 }
 
 // Ensure the cucumber tests are executed as part of the build. Makes for a very pretty output.
 build.dependsOn cucumber
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    behaviorTestCompile 'info.cukes:cucumber-java:1.2.4'
-    behaviorTestCompile 'info.cukes:cucumber-junit:1.2.4'
+  testCompile group: 'junit', name: 'junit', version: '4.12'
+  behaviorTestCompile 'info.cukes:cucumber-java:1.2.4'
+  behaviorTestCompile 'info.cukes:cucumber-junit:1.2.4'
+
+  compile group: 'com.aliyun', name: 'aliyun-java-sdk-core', version: '3.0.9'
+
 }

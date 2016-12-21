@@ -14,3 +14,4 @@ Feature: I would like to verify my calculator
       | start | eat | left |
       |  12   |  5  |  7   |
       |  20   |  5  |  15  |
+      |  30   |  25  |  5  |
