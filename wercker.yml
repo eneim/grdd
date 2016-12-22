@@ -1,29 +1,20 @@
 # docker box definition
 box: cgswong/aws
 
-# defining the dev pipeline
-dev:
-  steps:
-    # A step that executes `gradle bootRun` command
-    - script:
-      name: run gradle
-      code: |
-        ./gradlew test
-
 # Build definition
 build:
   # The steps that will be executed on build
   steps:
-    # A step that executes `gradle build` command
+    # A step that executes `gradle test` command
     - script:
         name: show base information
         code: |
           ./gradlew -v
           echo $JAVA_HOME
     - script:
-        name: run gradle
+        name: run unit test
         code: |
-          ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR shadowJar
+          ./gradlew test
 
 deploy:
   steps:
@@ -34,7 +25,9 @@ deploy:
           export AWS_SECRET_ACCESS_KEY=$SWA_SECRET_KEY
           export AWS_DEFAULT_REGION=us-west-2
           export AWS_DEFAULT_OUTPUT=json
-
+    - script: build executable jar file
+        code: |
+          ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR shadowJar
     - script:
         name: upload to S3
         code: |
@@ -45,4 +38,4 @@ deploy:
         url: $SLACK_URL_GITHUB
         channel: github
         username: cibot
-        notify_on: "succeed"
+        notify_on: "failed"
