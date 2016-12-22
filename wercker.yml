@@ -25,7 +25,8 @@ deploy:
           export AWS_SECRET_ACCESS_KEY=$SWA_SECRET_KEY
           export AWS_DEFAULT_REGION=us-west-2
           export AWS_DEFAULT_OUTPUT=json
-    - script: build executable jar file
+    - script:
+        name: build executable jar file
         code: |
           ./gradlew --full-stacktrace -q --project-cache-dir=$WERCKER_CACHE_DIR shadowJar
     - script:
