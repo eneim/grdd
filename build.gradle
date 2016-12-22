@@ -34,6 +34,13 @@ sourceSets {
   }
 }
 
+// Always show the result of every unit test, even if it passes.
+test {
+  testLogging {
+    events "passed", "skipped", "failed", "standardOut", "standardError"
+  }
+}
+
 shadowJar {
   baseName = 'grdd'
   version = '1.0.0'
