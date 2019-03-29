@@ -6,7 +6,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
   }
 }
 
@@ -25,12 +25,13 @@ ext {
 sourceSets {
   behaviorTest {
     java {
-      srcDir 'src/behaviorTest/java'
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+      srcDir file('src/behaviorTest/java')
     }
     resources {
-      srcDir 'src/behaviorTest/resources'
+      srcDir file('src/behaviorTest/resources')
     }
-    compileClasspath += sourceSets.main.runtimeClasspath
   }
 }
 
@@ -42,14 +43,8 @@ test {
 }
 
 shadowJar {
-  baseName = 'grdd'
+  archiveBaseName = 'grdd'
   version = '1.0.0'
-}
-
-// build helper
-task wrapper(type: Wrapper) {
-  gradleVersion = '3.2.1'
-  distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
 task cucumber() {
@@ -60,19 +55,6 @@ task cucumber() {
       classpath = configurations.behaviorTestRuntime + sourceSets.main.output +
               sourceSets.behaviorTest.output
       args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources']
-    }
-  }
-}
-
-task cucumber2() {
-  dependsOn assemble, compileJava, compileBehaviorTestJava
-  doLast {
-    javaexec {
-      main = "cucumber.api.cli.Main"
-      classpath = configurations.behaviorTestRuntime + sourceSets.main.output +
-              sourceSets.behaviorTest.output
-      args = ['--plugin', 'pretty', '--glue', 'im.ene.grdd', 'src/behaviorTest/resources/im/ene/grdd/' +
-              feature]
     }
   }
 }
@@ -89,11 +71,13 @@ repositories {
   mavenCentral()
 }
 
+//configurations {
+//  behaviorTestCompile.extendsFrom testCompile
+//  behaviorTestRuntime.extendsFrom testRuntime
+//}
+
 dependencies {
   testCompile group: 'junit', name: 'junit', version: '4.12'
   behaviorTestCompile 'info.cukes:cucumber-java:1.2.4'
   behaviorTestCompile 'info.cukes:cucumber-junit:1.2.4'
-
-  compile group: 'com.aliyun', name: 'aliyun-java-sdk-core', version: '3.0.9'
-
 }
